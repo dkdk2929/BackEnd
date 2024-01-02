@@ -3,11 +3,13 @@ const dotenv = require('dotenv')
 dotenv.config()
 
 const authMiddleWare = (req, res, next) => {
-    const token = req.headers.token.split(' ')[1]
+    const token = req.headers.token.split(' ')[1];
+    console.log(req.headers);
+    console.log(token);
     jwt.verify(token, process.env.ACCESS_TOKEN, function (err, user) {
         if (err) {
             return res.status(404).json({
-                message: 'The authemtication',
+                message: 'The authentication',
                 status: 'ERROR'
             })
         }
@@ -15,7 +17,7 @@ const authMiddleWare = (req, res, next) => {
             next()
         } else {
             return res.status(404).json({
-                message: 'The authemtication',
+                message: 'The authentication',
                 status: 'ERROR'
             })
         }
@@ -23,12 +25,12 @@ const authMiddleWare = (req, res, next) => {
 }
 
 const authUserMiddleWare = (req, res, next) => {
-    const token = req.headers.token.split(' ')[1]
+    const token = req.headers.token.split(' ')[1];
     const userId = req.params.id
     jwt.verify(token, process.env.ACCESS_TOKEN, function (err, user) {
         if (err) {
             return res.status(404).json({
-                message: 'The authemtication',
+                message: 'The authentication',
                 status: 'ERROR'
             })
         }
@@ -36,7 +38,7 @@ const authUserMiddleWare = (req, res, next) => {
             next()
         } else {
             return res.status(404).json({
-                message: 'The authemtication',
+                message: 'The authentication',
                 status: 'ERROR'
             })
         }
