@@ -8,7 +8,6 @@ dotenv.config()
 const app = express()
 const port = process.env.PORT || 4000
 
-
 app.get('/',(req,res) => {
     res.send('Hello World')
 
@@ -17,7 +16,6 @@ app.use(bodyParser.json())
 
 routes(app);
 
-
 mongoose.connect(`${process.env.MONGO_DB}`)
 .then(() =>{
     console.log('Connect to DB successfully ')
@@ -25,8 +23,6 @@ mongoose.connect(`${process.env.MONGO_DB}`)
 .catch((err) => {
     console.log(err)
 })
-
-
 
 app.listen(port,() => { 
     console.log('Server is running in port ',+ port)
