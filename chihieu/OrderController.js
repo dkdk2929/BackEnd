@@ -108,6 +108,42 @@ async function updateStock(id, quantity) {
     await product.save({ validateBeforeSave: false })
 }
 
+//Cart
+exports.addToCart = catchAsyncErrors(async (req, res, next) => {
+    const { productId, quantity } = req.body;
+
+    const product = await Product.findById(productId);
+    if (!product) {
+        return next(new ErrorHandler('Sản phẩm không tồn tại', 404));
+    }
+
+    const order = await Order.findOne({ user: req.user._id });
+    if (!order) {
+        // Nếu chưa có đơn hàng, tạo một đơn hàng mới
+        const newOrder = new Order({
+            user: req.user._id,
+            cart: [{ product: productId, quantity: quantity, price: product.price }],
+            // ...các thông tin order khác
+        });
+        await newOrder.save();
+    } else {
+        // Nếu đã có đơn hàng, thêm sản phẩm vào giỏ hàng của đơn hàng đó
+        const productIndex = order.cart.findIndex(item => item.product.toString() === productId);
+        if (productIndex > -1) {
+            // Nếu sản phẩm đã tồn tại trong giỏ hàng, cập nhật số lượng
+            order.cart[productIndex].quantity += quantity;
+        } else {
+            // Nếu sản phẩm chưa tồn tại trong giỏ hàng, thêm sản phẩm mới vào giỏ hàng
+            order.cart.push({ product: productId, quantity: quantity, price: product.price });
+        }
+        await order.save();
+    }
+
+    res.status(200).json({
+        success: true,
+        message: 'Sản phẩm đã được thêm vào giỏ hàng'
+    });
+});
 
 
 // GET MONTHLY INCOME
