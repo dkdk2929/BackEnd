@@ -21,7 +21,24 @@ const orderSchema = mongoose.Schema({
         country: {
             type: String,
             required: true
+        },
+         cart: [
+        {
+            product: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Product',
+                required: true
+            },
+            quantity: {
+                type: Number,
+                default: 1 // Số lượng mặc định khi thêm sản phẩm vào giỏ hàng
+            },
+            price: {
+                type: Number,
+                required: true
+            }
         }
+    ],
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
