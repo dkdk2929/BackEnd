@@ -21,8 +21,7 @@ router.route('/orders/me').get(isAuthenticatedUser, myOrders);
 router.route('/admin/orders/income').get(getMonthlyIncome);
 router.route('/admin/orders/').get(isAuthenticatedUser, authorizeRoles('admin'), allOrders);
 router.route('/admin/order/:id')
-    .put(isAuthenticatedUser, authorizeRoles('admin'), updateOrder)
-
-
+    .put(isAuthenticatedUser, authorizeRoles('admin'), updateOrder);
+router.route('/cart/add').post(isAuthenticatedUser, addToCart)
 
 module.exports = router;
